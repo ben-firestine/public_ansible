@@ -1,0 +1,5 @@
+CSV attached.
+Summary:
+
+Total number of computers checked: {{ computers_checked }}
+Total number of issues found: {{ issue_count }}

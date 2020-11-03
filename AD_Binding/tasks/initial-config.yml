@@ -1,0 +1,52 @@
+---
+# Ensures that the hostname is in the correct format
+- hostname:
+    name: "{{ hostname }}"
+
+# Installs all the needed applications
+- name: Installing packages for Ubuntu based machines
+  apt:
+    pkg:
+    - realmd
+    - sssd
+    - sssd-tools
+    - libnss-sss
+    - libpam-sss
+    - krb5-user
+    - adcli
+    - samba-common-bin
+    - packagekit
+    - python3-pexpect
+  when: ansible_distribution == "Ubuntu"
+
+- name: Installing packages for Redhat based machines
+  yum:
+    name: 
+      - sssd 
+      - realmd 
+      - oddjob 
+      - oddjob-mkhomedir 
+      - adcli 
+      - samba-common 
+      - samba-common-tools
+      - krb5-workstation
+      - openldap-clients
+      - python3-pexpect
+  when: ansible_distribution == "RedHat"
+
+
+# Copies configuration files to the remote machine
+- name: Copying krb5.conf template
+  template:
+    src: ./templates/krb5.conf
+    dest: /etc/krb5.conf
+
+- name: Copying realmd.conf template
+  template:
+    src: ./templates/realmd.conf
+    dest: /etc/realmd.conf
+
+- name: Copying pam.d template
+  template:
+    src: ./templates/common-session
+    dest: /etc/pam.d/common-session

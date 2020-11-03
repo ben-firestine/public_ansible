@@ -1,0 +1,2 @@
+#Block all incoming connections that aren't whitelisted
+sshd:ALL

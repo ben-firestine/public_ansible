@@ -1,0 +1,42 @@
+---
+################################################################################################################
+#This playbook updates a Linux based machine
+#
+#Last updated by: Ben Firestine 10/19/2020
+################################################################################################################
+
+# Filter out offline hosts
+- name: identify reachable hosts
+  hosts: all
+  gather_facts: false
+
+# Checking for online hosts
+  tasks:
+    - block:
+        - name: determine hosts that are up
+          wait_for_connection:
+            timeout: 5
+          vars:
+            ansible_connection: ssh
+        - name: add devices with connectivity to the "reachable" group
+          group_by:
+            key: "reachable"
+      rescue:
+        - debug: msg="cannot connect to {{inventory_hostname}}"
+
+# Update online host
+- name: Online hosts
+  hosts: reachable
+  become: true
+  any_errors_fatal: true
+  gather_facts: True
+
+# Import variable/secret files 
+  vars_files:   
+    - ../secrets/vault
+    - ./vars/default.yml
+
+  tasks:
+
+  # Update the machine
+  - include ./tasks/install.yml

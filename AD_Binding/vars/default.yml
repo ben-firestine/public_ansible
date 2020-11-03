@@ -1,0 +1,34 @@
+---
+###############################
+# global variables
+###############################
+
+#The following two variables are vaulted so that your credentials are always secure. 
+#You will have to create the vault yourself
+vault_user: !vault |
+
+vault_password: !vault |
+
+# Default email list 
+default_list: ../mail_lists/default_list.txt
+
+# Main email list for the mail task
+main_list
+
+###############################
+# initial_config variables
+###############################
+hostname
+
+###############################
+# bind.yml variables
+###############################
+bind_domain: OU=Staging,OU=Computers,OU=SG_HOME,OU=_Delegated,DC=ad,DC=birdwizard,DC=org
+AD_DOMAIN: AD.BIRDWIZARD.ORG
+
+###############################
+# ssh_sudo_access variables
+###############################
+ssh_group: This contains the security group to give ssh access
+sudo_group: This contains the security group to give administrator access
+ansible_group: This contains the security group for your ansible account

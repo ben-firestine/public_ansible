@@ -1,0 +1,20 @@
+---
+# Runs the bind command and then waits for a response
+- name: Binding to AD
+  expect:
+    command: "realm join {{ AD_DOMAIN }} --user={{ vault_user }} --computer-ou={{ bind_domain }} --computer-name={{ hostname }}"
+    responses:
+      Password for .*: "{{ vault_password }}"
+
+# Applies configuration changes to sssd.conf
+- name: Update ldap_id_mapping in sssd.conf file
+  shell: sed -i 's/ldap_id_mapping = False/ldap_id_mapping = True/g' /etc/sssd/sssd.conf
+
+- name: Update access_provider in sssd.conf file
+  shell: sed -i 's/access_provider = ad/access_provider = simple/g' /etc/sssd/sssd.conf
+
+- name: Add ignore_group_members in sssd.conf file
+  lineinfile:
+    path: /etc/sssd/sssd.conf
+    line: 'ignore_group_members = True'
+

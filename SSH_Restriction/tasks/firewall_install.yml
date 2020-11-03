@@ -1,0 +1,61 @@
+---
+# Install firewalld service
+- name: Install latest version of firewalld for Ubuntu/Debian
+  apt:
+    name: firewalld
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install latest version of firewalld for RedHat
+  yum:
+    name: firewalld
+    state: latest
+  when: ansible_distribution == "RedHat"
+
+# Start and enable firewalld
+- name: start the firewalld service
+  systemd:
+    name: firewalld
+    state: started
+
+- name: enable the firewalld service
+  systemd:
+    name: firewalld
+    enabled: yes
+
+# Stop and disable iptables
+- name: stop the iptables service for RedHat
+  systemd:
+    name: iptables
+    state: stopped
+  when: ansible_distribution == "RedHat" 
+
+- name: stop the ip6tables service for RedHat
+  systemd:
+    name: ip6tables
+    state: stopped
+  when: ansible_distribution == "RedHat" 
+
+- name: disable the iptables service for RedHat
+  systemd:
+    name: iptables
+    enabled: no
+  when: ansible_distribution == "RedHat" 
+
+- name: disable the ip6tables service for RedHat
+  systemd:
+    name: ip6tables
+    enabled: no
+  when: ansible_distribution == "RedHat" 
+
+- name: stop the ufw service for Ubuntu
+  systemd:
+    name: ufw
+    state: stopped
+  when: ansible_distribution == "Ubuntu" 
+
+- name: disable the ufw service for Ubuntu
+  systemd:
+    name: ufw
+    enabled: no
+  when: ansible_distribution == "Ubuntu"
