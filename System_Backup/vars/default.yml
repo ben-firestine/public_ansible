@@ -1,0 +1,12 @@
+---
+###############################
+# global variables
+###############################
+
+date: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
+
+# Location of backup file
+backup_file: ./templates/test_backup.txt
+
+# Points to the defualt email list for all playbooks 
+default_list: ../mail_lists/default_list.txt
