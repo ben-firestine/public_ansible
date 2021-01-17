@@ -49,8 +49,8 @@
   # Runs complaince modules and reporting
   - include: ./tasks/initial_setup.yml
 
-  # Email resulting report
-  - include: ./tasks/mail.yml
+  # Email resulting report - UNCOMMENT TO ENABLE
+  #- include: ./tasks/mail.yml
 
   # Cleanup
   - name: Deleting excel file that was sent via email

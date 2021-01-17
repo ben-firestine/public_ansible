@@ -48,5 +48,5 @@
   - include: ./tasks/vpn_ssh.yml
     when: ansible_distribution == "Ubuntu"
   
-  # Emails results
-  - include: ./tasks/mail.yml
+  # Emails results - UNCOMMENT TO ENABLE
+  #- include: ./tasks/mail.yml

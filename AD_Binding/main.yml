@@ -48,4 +48,5 @@
   # Restricts SSH and SUDO access
   - include: ./tasks/ssh_sudo_access.yml
 
-  - include: ./tasks/mail.yml
+  #UNCOMMENT TO ENABLE EMAIL FUNCTION
+  #- include: ./tasks/mail.yml

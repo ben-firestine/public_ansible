@@ -42,4 +42,5 @@
   # Runs the backup script
   - include: ./tasks/backup.yml
 
-  - include: ./tasks/mail.yml
+  # UNCOMMENT TO ENABLE
+  #- include: ./tasks/mail.yml
