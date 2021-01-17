@@ -33,7 +33,7 @@
 
 # Import variable/secret files 
   vars_files:   
-    - ../secrets/vault
+  # - ../secrets/vault
     - ./vars/default.yml
 
   tasks:
