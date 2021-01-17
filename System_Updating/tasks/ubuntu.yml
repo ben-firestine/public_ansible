@@ -1,0 +1,58 @@
+---
+# Gets a list of package updates
+- name: apt-get update
+  apt:
+    update_cache: yes
+
+- name: Gets a list of pending updates
+  shell: apt-get --simulate dist-upgrade
+  args:
+    warn: false
+  ignore_errors: yes
+  register: package_simulate
+
+# Removes un-needed dependencies and then upgrades
+- name: apt-get autoremove
+  apt:
+    autoremove: yes
+
+- name: apt-get upgrade
+  apt:
+    upgrade: dist
+  register: update
+
+# Restart required?
+- name: check if reboot is needed
+  stat: path=/var/run/reboot-required
+  register: check_reboot
+
+# Calculates restart time IF required
+- name: get time
+  set_fact:
+    reboot_required: "'Yes'"
+    restart_msg: "this machine will resart at "
+    hour: "{{ ansible_date_time.hour | int + 1 }}"
+    minute: "{{ ansible_date_time.minute }}"
+    second: "{{ ansible_date_time.second }}"
+  when: check_reboot.stat.exists
+
+- name: set time
+  set_fact:
+    time: '{{ hour }}:{{ minute }}:{{ second }}'
+  when: check_reboot.stat.exists
+
+# Email IF there was an update - UNCOMMENT TO ENABLE
+#- include: ./tasks/mail.yml
+#  when: update.changed
+
+# Ends playbook if the file DOES NOT exist
+- meta: end_host
+  when: not check_reboot.stat.exists
+
+# Initate system restart
+- name: reboot system
+  reboot:
+    msg: "Reboot initiated by Ansible due to system updates"
+    pre_reboot_delay: 3600
+    post_reboot_delay: 300
+    reboot_timeout: 5400

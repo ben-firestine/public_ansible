@@ -38,5 +38,10 @@
 
   tasks:
 
-  # Update the machine
-  - include ./tasks/install.yml
+  # Updates ubuntu based machines
+  - include: ./tasks/ubuntu.yml
+    when: ansible_distribution == "Ubuntu"
+
+  # Updates redhat based machines
+  - include: ./tasks/redhat.yml
+    when: ansible_distribution == "RedHat"
