@@ -1,3 +1,0 @@
-/home/$USER/test_file.txt
-/home/$USER/test_location/test_tar-{{ date }}.tgz
-/home/$USER/rsync.log
