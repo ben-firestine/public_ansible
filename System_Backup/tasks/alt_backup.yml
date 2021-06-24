@@ -1,0 +1,46 @@
+---
+#####################################################################################
+# This playbook currently does not work in Ansible AWX. You get an error that it can not find the directory in question
+#
+#Last updated by: Ben Firestine 06/23/2021
+#####################################################################################
+
+# Installs rsync
+- name: Installs rsync on Ubuntu
+  apt: 
+    name: rsync
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: Installs rsync on RedHat
+  yum:
+    name: rsync
+    state: latest
+  when: ansible_distribution == "RedHat"
+ 
+# Parses out the backup file
+- set_fact:
+     backup_file: "{{ lookup('file', '{{ backup_file }}').splitlines() }}"
+
+- set_fact:
+    backup_source: "{{ backup_file[0] }}"
+
+- set_fact:
+    backup_destination: "{{ backup_file[1] }}"
+
+- set_fact:
+    log_location: "{{ backup_file[2] }}"
+
+# Creates backup
+- synchronize:
+    src: "{{ backup_source }}"
+    dest: "{{ backup_destination }}"
+    archive: yes
+    recursive: yes
+    compress: yes
+    rsync_opts:
+      - "--bwlimit=40000"
+      - "--numeric-ids"
+      - "--progress"
+      - "--log-file= {{ log_location }}"
+  delegate_to: "{{ inventory_hostname }}"

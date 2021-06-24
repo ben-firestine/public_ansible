@@ -1,0 +1,23 @@
+---
+# Binds the computer to Active Directory and waits for verification
+- name: Binding to AD
+  expect:
+    command: "realm join {{ AD_DOMAIN }} --user={{ vault_user }} --computer-ou={{ bind_domain }} --computer-name={{ hostname }}"
+    responses:
+      Password for .*: "{{ vault_password }}"
+
+# Applying template to SSSD.conf file
+- name: Applying template to SSSD.conf file
+  template:
+    src: ./templates/sssd.conf
+    dest: /etc/sssd/sssd.conf
+    owner: root
+    group: root
+    mode: '0600'
+    backup: yes
+
+# Restart SSSD service to apply changes
+- name: Restarting SSSD service
+  service:
+    name: sssd
+    state: restarted

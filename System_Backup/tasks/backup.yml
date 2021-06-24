@@ -1,0 +1,16 @@
+---
+# Parses out the backup file
+- set_fact:
+    backup_file: "{{ lookup('file', '{{ backup_file }}').splitlines() }}"
+
+- set_fact:
+    backup_source: "{{ backup_file[0] }}"
+
+- set_fact:
+    backup_destination: "{{ backup_file[1] }}"
+
+# Creates backup and stores output
+- name: Backing up requested files
+  command: "tar -cplzf {{ backup_destination }} {{ backup_source }}"
+  register: log_output
+

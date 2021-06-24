@@ -1,0 +1,27 @@
+---
+# Get last updated date
+- name: When was the computer last updated
+  shell: date -d "(stat -c %Y /var/lib/apt/periodic/update-success-stamp)" +%Y-%m-%d
+  args:
+    warn: false
+  ignore_errors: true
+  register: last_updated
+
+# Compliance date
+- name: Get the end of compliance date
+  shell: date +%Y-%m-%d -d "90 days ago"
+  args:
+    warn: false
+  ignore_errors: true
+  register: compliance_date
+
+# Was NOT updated within 90 days
+- set_fact:
+    issue_count: "{{ issue_count | int + 1 }}"
+    system_status_result: "{{ last_updated }}"
+  when: "last_updated.stdout < compliance_date.stdout"
+
+# Was updated within 90 days
+- set_fact:
+    system_status_result: Compliant
+  when: "last_updated.stdout > compliance_date.stdout"

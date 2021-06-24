@@ -1,0 +1,49 @@
+---
+#####################################################################################
+# This playbook's function is to automatically backup files to another location
+#
+#Last updated by: Ben Firestine 06/24/2021
+#####################################################################################
+
+# Filter out offline hosts
+- name: identify reachable hosts
+  hosts: all
+  gather_facts: false
+
+  vars_files:
+    - ./vars/default.yml
+
+# Checking for online hosts
+  tasks:
+    - block:
+        - name: determine hosts that are up
+          wait_for:
+            port: "{{ ssh_port }}"
+          vars:
+            ansible_connection: ssh
+        - name: add devices with connectivity to the "reachable" group
+          group_by:
+            key: "reachable"
+      rescue:
+        - debug: msg="cannot connect to {{inventory_hostname}}"
+
+# Backup files
+- name: Online hosts
+  hosts: reachable
+  become: true
+  any_errors_fatal: true
+  gather_facts: True
+
+# Import variable/secret files
+  vars_files:
+    # This contains secrets for credentials like emails
+    #- ../secrets/vault
+    - ./vars/default.yml
+ 
+  tasks:
+
+  # Runs the backup script
+  - include: ./tasks/backup.yml
+
+  # Sends an email with backup status. UNCOMMENT TO ENABLE EMAIL FUNCTION
+  #- include: ./tasks/mail.yml

@@ -1,0 +1,18 @@
+---
+############################
+# global variables
+############################
+
+# Used to check if the software has been installed properly
+path: N/A
+
+# Used in the mail_template file
+application: GlobalProtect VPN
+
+# Location of the default mail file
+default_list: ../mail_lists/default_list.txt
+
+main_list: 
+
+#Custom port
+ssh_port: 22

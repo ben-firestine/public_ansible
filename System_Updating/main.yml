@@ -1,0 +1,51 @@
+---
+#####################################################################################
+# This playbook goes through the general update and maintaince of Ubuntu and Red Hat Machines
+#
+#Last updated by: Ben Firestine 06/23/2021
+#####################################################################################
+
+# Filter out offline hosts
+- name: identify reachable hosts
+  hosts: all
+  gather_facts: false
+
+  vars_files:
+    - ./vars/default.yml
+
+# Checking for online hosts
+  tasks:
+    - block:
+        - name: determine hosts that are up
+          wait_for:
+            port:"{{ ssh_port }}"
+          vars:
+            ansible_connection: ssh
+        - name: add devices with connectivity to the "reachable" group
+          group_by:
+            key: "reachable"
+      rescue:
+        - debug: msg="cannot connect to {{inventory_hostname}}"
+
+# Update online hosts
+- name: Online hosts
+  hosts: reachable
+  serial: 3
+  become: true
+  any_errors_fatal: true
+  gather_facts: True
+
+# Import variable/secret files 
+  vars_files:   
+   # - ../secrets/vault
+    - ./vars/default.yml
+
+  tasks:
+
+  # Updates ubuntu based machines
+  - include: ./tasks/ubuntu.yml
+    when: ansible_distribution == "Ubuntu"
+
+  # Updates redhat based machines
+  - include: ./tasks/redhat.yml
+    when: ansible_distribution == "RedHat"

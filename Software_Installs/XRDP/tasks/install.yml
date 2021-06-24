@@ -1,0 +1,28 @@
+---
+# Install XRDP
+- name: Install XRDP (APT-GET)
+  apt:
+    name: xrdp
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install XRDP (YUM)
+  yum:
+    name: xrdp
+    state: latest
+  when: ansible_distribution == "RedHat"
+
+- name: enable the XRDP service
+  systemd:
+    name: xrdp
+    enabled: yes
+
+# Configure Firewall Rules
+- name: Add the firewall rule for xrdp
+  firewalld:
+    zone: internal
+    port: 3389
+    permanent: yes
+    immediate: yes
+    state: enabled
+ 

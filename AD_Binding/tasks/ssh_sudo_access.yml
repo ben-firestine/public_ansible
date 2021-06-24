@@ -1,0 +1,41 @@
+---
+# Gives SUDO priviledges to the Active Directory security group
+- name: Permit Active Directory group for customer sudo access
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    line: '%{{ sudo_group }} ALL=(ALL:ALL) ALL'
+    validate: /usr/sbin/visudo -cf %s
+
+# Gives ONLY the Ansible Administrator account SUDO access without a password
+- name: Permit Active Directory group for Ansible sudo access
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    line: '%{{ ansible_group }} ALL=(ALL:ALL) NOPASSWD:ALL'
+    validate: /usr/sbin/visudo -cf %s
+
+# Removes local user line
+- name: Removes local user line from visudo
+  lineinfile:
+    path: /etc/sudoers
+    state: absent
+    line: '%connectservices ALL=(ALL:ALL) NOPASSWD:ALL'
+    validate: /usr/sbin/visudo -cf %s
+
+# Applying GUI admin template
+- name: Applying template to 51-ubuntu-admin.conf
+  template:
+    src: ./templates/51-ubuntu-admin.conf
+    dest: /etc/polkit-1/localauthority.conf.d/51-ubuntu-admin.conf
+    owner: root
+    group: root
+    mode: '0600'
+  when: ansible_distribution == "Ubuntu"
+
+# Change the localaccount password
+- name: update local account password
+  user:
+    name: example_user
+    update_password: always
+    password: "{{ local_pass | string | password_hash('sha512') }}"

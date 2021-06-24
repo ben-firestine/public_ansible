@@ -1,0 +1,17 @@
+---
+# Remote firewall configuration
+- name: Get remote firewall configuration
+  shell: firewall-cmd --list-all --zone=internal
+  args:
+    warn: false
+  register: remote_firewall_rules
+
+# Is there an issue?
+- set_fact:
+    issue_count: "{{ issue_count | int + 1 }}"
+  when: remote_firewall_rules.stdout_lines[4] != approved_firewall_rules
+ 
+# Is it compliant?
+- set_fact:
+    firewall_results: Compliant
+  when: remote_firewall_rules.stdout_lines[4] == approved_firewall_rules

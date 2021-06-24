@@ -1,0 +1,27 @@
+---
+
+# prepares a list of the storage devices to check
+- set_fact:
+     main_storage: "{{ default_storage + '|' +  custom_storage }}"
+  when: custom_storage is defined
+
+- set_fact:
+    main_storage: "{{ default_storage }}"
+  when: custom_storage is not defined
+
+# Checks the storage devices for disk usage
+- name: Getting disk use percent
+  shell: df | egrep -w '{{ main_storage }}' | tr -s ' ' | cut -d" " -f 5
+  register: storage_output
+
+# Stats for the email
+- name: Getting storage stats
+  shell: df -h | egrep -w '{{ main_storage }}'
+  register: storage
+
+# Add a warning if there are issues
+- set_fact:
+    storage_status: "High disk usage detected"
+    alert: True
+  loop: "{{ storage_output.stdout_lines }}"
+  when: item >= threshold

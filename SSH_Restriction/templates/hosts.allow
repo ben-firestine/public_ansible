@@ -1,0 +1,2 @@
+#Example IP range
+sshd:X.X.X.X/24

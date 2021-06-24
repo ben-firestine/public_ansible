@@ -1,0 +1,31 @@
+---
+# Clears old/custom firewall rules
+- name: flush ALL IP rules
+  file:
+    path: /etc/firewalld/zones
+    state: absent
+
+- name: restart firewalld service
+  systemd:
+    name: firewalld
+    state: restarted
+
+# example WHITELIST
+- name: Example firewall WHITELIST
+  firewalld:
+    zone: internal
+    source: "{{ item }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  loop:
+    - X.X.X.X/24
+
+# Blocks all other connections
+- name: firewalld block all other connections
+  firewalld:
+    zone: public
+    service: ssh
+    permanent: yes
+    immediate: yes
+    state: disabled

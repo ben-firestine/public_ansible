@@ -1,0 +1,28 @@
+Ansible monitoring has incountered an issue with: {{ ansible_hostname }}
+
+There are the following warnings:
+
+RAID:
+
+{{ zpool_status }}
+
+storage:
+
+{{ storage_status }}
+
+- Filesystem: {{ storage[0] }}
+- Size: {{ storage[1] }}
+- Used: {{ storage[2] }}
+- Avail: {{ storage[3] }}
+- Use%: {{ storage[4] }}
+- Mounted on: {{ storage[5] }}
+
+System Usage:
+
+- User CPU usage: {{ user_cpu }}
+- System CPU usage: {{ system_cpu }}
+
+- Total memory: {{ mem_total }}
+- Used memory: {{ mem_used }}
+- Percent usage: {{ (((mem_used | int) / (mem_total | int)) * 100) | round }}%
+

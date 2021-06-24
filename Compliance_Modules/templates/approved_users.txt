@@ -1,0 +1,5 @@
+root
+sync
+lxd
+pollinate
+example_user

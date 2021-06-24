@@ -1,0 +1,28 @@
+---
+###########################
+# global variables
+###########################
+
+# Package updating
+package_simulate: N/A
+update: False
+
+#Restart required?
+check_reboot: False
+reboot_required: 'NO'
+restart_msg: "this machine does not need a restart"
+
+# Time calculation
+hour: 00
+minute: 00
+second: 00
+time: " "
+
+# Location of the default mail file
+default_list: ../mail_lists/default_list.txt
+
+# This is the main email list
+main_list: 
+
+#Custom port information
+ssh_port: 22

@@ -1,0 +1,24 @@
+---
+# Gathers CPU stats from top
+- name: Get CPU usage 
+  shell: "top -b -n 1"
+  register: top 
+
+# Sets the CPU and RAM usage facts
+- set_fact:
+    system_cpu: "{{ top.stdout_lines[2].split()[3] |float|round }}%"
+    user_cpu: "{{ top.stdout_lines[2].split()[1] |float|round }}%" 
+    mem_total: "{{ top.stdout_lines[3].split()[3] }}"
+    mem_used: "{{ top.stdout_lines[3].split()[7] }}"
+
+# Sets RAM percent used fact    
+- set_fact:
+    percent_used: "{{ ((mem_used |float|round) / (mem_total |float|round) * 100) |round }}%"
+
+# Alerts if over the threshold for CPU or RAM
+- set_fact:
+    alert: True
+  when:
+    - system_cpu >= threshold
+    - user_cpu >= threshold
+    - percent_used >= threshold

@@ -1,0 +1,50 @@
+---
+###############################
+# global variables
+###############################
+
+# Location of the default email list
+default_list: ../mail_lists/default_list.txt
+
+# Users to be emailed
+main_list: 
+
+#SSH port
+ssh_port: 22
+
+#Triggers when there is a problem
+alert: False
+
+#Determines when an ALERT is triggered
+threshold: 80%
+###############################
+# storage variables
+###############################
+
+#Used for getting a list of storage devices to check
+default_storage: /
+main_storage:
+
+#Used for checking disk usage
+storage_output: default_value
+storage_status: GOOD
+
+###############################
+# raid_check variables
+###############################
+
+#ZFS output status
+zpool_status: DEFAULT_ERROR
+
+###############################
+# system_usags_check variables
+###############################
+
+#CPU stats
+system_cpu: 0
+user_cpu: 0
+
+#MEM stats
+mem_total: 0
+mem_used: 0
+percent_used: 0

@@ -1,0 +1,39 @@
+---
+###############################
+# global variables
+###############################
+
+vault_user: !vault | <REPLACE THIS WITH YOUR VAULTED USERNAME>
+
+vault_password: !vault | <REPLACE THIS WITH YOUR VAULTED PASSWORD>
+
+# Points to the defualt email list for all playbooks 
+default_list: ../mail_lists/default_list.txt
+
+# Main email list for the mail task
+main_list:
+
+# Custom port information
+ssh_port: 22
+
+###############################
+# initial_config variables
+###############################
+hostname: N/A
+
+###############################
+# bind.yml variables
+###############################
+bind_domain: OU=Staging,OU=Computers,OU=SG_HOME,DC=ad,DC=example,DC=com
+AD_DOMAIN: AD.EXAMPLE.COM
+
+local_pass: !vault | <REPLACE THIS WITH YOUR VAULTED LOCAL USERNAME>
+
+ad_hostname: "{{ hostname }}.ad.example.com"
+
+###############################
+# ssh_sudo_access variables
+###############################
+ssh_group: {{ hostname }}_SSH
+sudo_group: {{ hostname }}_sudoers
+ansible_group: Ansible-Administrators
