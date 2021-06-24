@@ -3,24 +3,26 @@
 # global variables
 ###########################
 
-#Package updating
+# Package updating
 package_simulate: N/A
 update: False
 
-#Restart?
+#Restart required?
 check_reboot: False
-reboot_required: no
+reboot_required: 'NO'
+restart_msg: "this machine does not need a restart"
 
-#time calculation
+# Time calculation
 hour: 00
 minute: 00
 second: 00
-time: 00
+time: " "
 
-restart_msg: " A restart is not required at this time."
-
-# Points to the default email list that is used in all playbooks
+# Location of the default mail file
 default_list: ../mail_lists/default_list.txt
 
 # This is the main email list
 main_list: 
+
+#Custom port information
+ssh_port: 22

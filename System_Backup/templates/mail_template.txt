@@ -5,4 +5,6 @@ Ansible has backed up the following directory: {{ backup_source }}
 
 The backup has been stored in the following location: {{ backup_destination }}
 
-The rsync log for this playbook has been stored in the following location: {{ log_location }}
+Below is any errors that the archive encountered:
+
+{{ log_output.stderr }}

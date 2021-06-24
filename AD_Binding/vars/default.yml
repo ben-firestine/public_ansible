@@ -3,32 +3,37 @@
 # global variables
 ###############################
 
-#The following two variables are vaulted so that your credentials are always secure. 
-#You will have to create the vault yourself
-vault_user: !vault |
+vault_user: !vault | <REPLACE THIS WITH YOUR VAULTED USERNAME>
 
-vault_password: !vault |
+vault_password: !vault | <REPLACE THIS WITH YOUR VAULTED PASSWORD>
 
-# Default email list 
+# Points to the defualt email list for all playbooks 
 default_list: ../mail_lists/default_list.txt
 
 # Main email list for the mail task
-main_list
+main_list:
+
+# Custom port information
+ssh_port: 22
 
 ###############################
 # initial_config variables
 ###############################
-hostname
+hostname: N/A
 
 ###############################
 # bind.yml variables
 ###############################
-bind_domain: OU=Staging,OU=Computers,OU=SG_HOME,OU=_Delegated,DC=ad,DC=birdwizard,DC=org
-AD_DOMAIN: AD.BIRDWIZARD.ORG
+bind_domain: OU=Staging,OU=Computers,OU=SG_HOME,DC=ad,DC=example,DC=com
+AD_DOMAIN: AD.EXAMPLE.COM
+
+local_pass: !vault | <REPLACE THIS WITH YOUR VAULTED LOCAL USERNAME>
+
+ad_hostname: "{{ hostname }}.ad.example.com"
 
 ###############################
 # ssh_sudo_access variables
 ###############################
-ssh_group: This contains the security group to give ssh access
-sudo_group: This contains the security group to give administrator access
-ansible_group: This contains the security group for your ansible account
+ssh_group: {{ hostname }}_SSH
+sudo_group: {{ hostname }}_sudoers
+ansible_group: Ansible-Administrators

@@ -1,0 +1,58 @@
+---
+#####################################################################################
+# The focus of this playbook is to monitor functions of servers. Things like RAID health, storage availabilty, etc
+#
+#Last updated by: Ben Firestine 06/23/2021
+#####################################################################################
+
+# Filter out offline hosts
+- name: identify reachable hosts
+  hosts: all
+  gather_facts: false
+
+  vars_files:
+    - ./vars/default.yml
+
+# Checking for online hosts
+  tasks:
+    - block:
+        - name: determine hosts that are up
+          wait_for:
+            port: "{{ ssh_port }}"
+          vars:
+            ansible_connection: ssh
+        - name: add devices with connectivity to the "reachable" group
+          group_by:
+            key: "reachable"
+      rescue:
+        - debug: msg="cannot connect to {{inventory_hostname}}"
+
+# Compliance Modules
+- name: Online hosts
+  hosts: reachable
+  become: true
+  any_errors_fatal: true
+  gather_facts: True
+
+# Import variable/secret files 
+  vars_files:   
+   # - ../secrets/vault
+    - ./vars/default.yml
+
+  tasks:
+  
+  # runs the raid_check if desinated by the host
+  - include: ./tasks/raid_check.yml
+    when: "'1' is in monitor"
+
+  # runs the storage_check if desinated by the host
+  - include: ./tasks/storage_check.yml
+    when: "'2' is in monitor"
+
+  # runs the system_usage_check if desinated by the host
+  - include: ./tasks/system_usage_check.yml
+    when: "'3' is in monitor"
+
+  # Sends an email if there are any errors. UNCOMMENT TO ENABLE MAIL FUNCTION
+  #- include: ./tasks/mail.yml
+  #  when: alert == True

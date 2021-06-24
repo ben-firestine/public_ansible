@@ -1,0 +1,12 @@
+---
+# Gather ZFS facts
+- name: Checking ZFS path
+  stat:
+    path: /sys/module/zfs
+  register: zfs
+
+# Gets the ZFS status from the remote machine
+- name: Get zpool status
+  command: /sbin/zpool status | grep -i '(DEGRADED|FAULTED|OFFLINE|UNAVAIL|REMOVED|FAIL|DESTROYED|corrupt|cannot|unrecover)'
+  register: zpool_status
+  when: zfs.stat.exists and zfs.stat.isdir

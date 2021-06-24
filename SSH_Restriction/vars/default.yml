@@ -3,7 +3,11 @@
 # global variables
 ###########################
 
-# Default email list	
+# Location of default email list	
 default_list: ../mail_lists/default_list.txt
 
-reachable:
+# This is the main email list
+mail_list:
+
+#custom port value
+ssh_port: 22

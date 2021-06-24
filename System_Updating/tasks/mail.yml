@@ -27,16 +27,16 @@
 
 - name: Sending an emails out to a list
   mail:
-    #example mailserver
+    #Example mailserver
     host: smtp.example.com
     port: 587
 
     #ALERT@example.com
-    username: ALERT@example.com
-    password: "{{ vault_example_secret }}"
+    username: alert@example.com
+    password: "{{ vault_alert_secret }}"
 
-    #Sends emails
-    from: admin@example.com
+    #Sends emails to the IT administrators
+    from: alert@example.com
     to: "{{ main_list }}"
 
     #Copies the template file and pastes it to the body of the email

@@ -10,8 +10,8 @@
     name: firewalld
     state: restarted
 
-# example whitelist
-- name: Firewalld example WHITELIST
+# example WHITELIST
+- name: Example firewall WHITELIST
   firewalld:
     zone: internal
     source: "{{ item }}"
@@ -19,8 +19,7 @@
     immediate: yes
     state: enabled
   loop:
-    - 192.168.11.0/24
-    - 192.168.20.X
+    - X.X.X.X/24
 
 # Blocks all other connections
 - name: firewalld block all other connections

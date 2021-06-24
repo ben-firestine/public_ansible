@@ -1,1 +1,1 @@
-'  sources: X.X.X.X'
+'  sources: X.X.X.X/24'

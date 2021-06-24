@@ -21,6 +21,9 @@ default_list: ../mail_lists/default_list.txt
 # Users to be emailed
 main_list: 
 
+#SSH port
+ssh_port: 22
+
 ###############################
 # system_update_check variables
 ###############################
@@ -33,6 +36,7 @@ last_update: N/A
 # local_user_check variables
 ###############################
 
+local_users_results: Compliant
 local_users: N/A
 non_approved_users: N/A
 approved_users: "{{ lookup('file','./templates/approved_users.txt').splitlines() }}"

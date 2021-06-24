@@ -1,21 +1,24 @@
 ---
-################################################################################################################
-#This playbook is used to restrict SSH in the firewall as well as SSHD to the VPN IP range
+#####################################################################################
+# This playbook's function is to restrict SSH connection to only approved IP addresses/ranges
 #
-#Last updated by: Ben Firestine 10/20/2020
-################################################################################################################
+#Last updated by: Ben Firestine 06/23/2021
+#####################################################################################
 
 # Filter out offline hosts
 - name: identify reachable hosts
   hosts: all
   gather_facts: false
 
+  vars_files:
+    - ./vars/default.yml
+
 # Checking for online hosts
   tasks:
     - block:
         - name: determine hosts that are up
-          wait_for_connection:
-            timeout: 5
+          wait_for:
+            port:"{{ ssh_port }}"
           vars:
             ansible_connection: ssh
         - name: add devices with connectivity to the "reachable" group
@@ -33,7 +36,7 @@
 
 # Import variable/secret files
   vars_files:
-    - ../secrets/vault
+   # - ../secrets/vault
     - ./vars/default.yml
 
   tasks:
@@ -48,5 +51,5 @@
   - include: ./tasks/vpn_ssh.yml
     when: ansible_distribution == "Ubuntu"
   
-  # Emails results - UNCOMMENT TO ENABLE
+  # Emails results. UNCOMMENT OUT TO ENABLE MAIL FUNCTION
   #- include: ./tasks/mail.yml

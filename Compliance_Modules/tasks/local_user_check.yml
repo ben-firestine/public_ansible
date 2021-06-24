@@ -1,7 +1,7 @@
 ---
-# Local users?
-- name: Get a list of local users
-  shell: 'cut -d : -f 1 /etc/passwd'
+# List local user
+- name: Get a filtered list of local users
+  shell: 'cat /etc/passwd | egrep -v "/usr/sbin/*" | egrep -v "/sbin/*" | cut -d : -f 1'
   args:
     warn: false
   ignore_errors: true
@@ -11,4 +11,5 @@
 - set_fact:
     non_approved_users: "{{ local_users.stdout_lines | difference(approved_users) }}"
     issue_count: "{{ issue_count | int + 1 }}"
+    local_users_results: issue detected
   when: "{{ local_users.stdout | difference(approved_users) | length  }} > 0"

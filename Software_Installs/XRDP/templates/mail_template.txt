@@ -1,0 +1,4 @@
+Hostname: {{ ansible_hostname }}
+OS: {{ ansible_distribution }} {{ ansible_distribution_version }}
+
+This hostname has successfully installed: {{ application }}

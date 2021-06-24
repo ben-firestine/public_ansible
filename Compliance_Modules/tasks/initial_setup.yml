@@ -10,7 +10,7 @@
   lineinfile:
     insertafter: EOF
     dest: "{{ excel_loc }}"
-    line: Hostname,Non-Approved Users,System Update Status,Firewall Status
+    line: Hostname,Non-Approved Users,Last Updated,Firewall Status
   delegate_to: localhost
 
 # Check for compliance
@@ -25,3 +25,4 @@
     line: "{{ ansible_hostname }},{{ item }},{{ system_status_result }},{{ firewall_results }}"
   with_items: "{{ non_approved_users }}"
   delegate_to: localhost
+  when: {{ system_status_result }} != "Compliant" && {{ firewall_results }} != "Compliant" && {{ local_users_result }} != "Compliant"

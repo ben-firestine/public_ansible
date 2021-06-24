@@ -1,0 +1,19 @@
+---
+# Transfer installer to remote machine
+- name: Copy package to remote host
+  copy:
+    src: ./files/<GlobalProtect file>
+    dest: /opt/<GlobalProtect file>
+
+# Installs the application
+- name: Install Package
+  shell: dpkg -i /opt/<GlobalProtect file>
+  
+# Verify that installation was successful
+- stat:
+    path: /opt/paloaltonetworks
+  register: path
+
+# Emails the IT administrators if install was successful. UNCOMMENT IF YOU WANT TO ENABLE THIS FUNCTION
+#- include: ./tasks/mail.yml
+#  when: path.stat.isdir is defined and path.stat.isdir

@@ -4,8 +4,6 @@ Variables that are used in this playbook:
 
 ===global variables===
 
-- reachable: This variable is used to store a list of all the hosts that are online and reachable via SSH
-
 - package_simulate: This variables contains a list of packages that need an update. This variable is used when I send out an email to the customer with what was updated
 
 - update: This boolean variable is used for checking to see if there was any packages updated
@@ -21,3 +19,5 @@ Variables that are used in this playbook:
 - second: This stores the second variable for when the remote machine needs to be restarted
 
 - time: This combines the above three variables into one time that is then sent to the customer via email
+
+- ssh_port: This variable allows for custom SSH ports on specific servers

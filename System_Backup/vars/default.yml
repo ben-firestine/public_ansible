@@ -3,10 +3,16 @@
 # global variables
 ###############################
 
+#Custom port information
+ssh_port: 22
+
 date: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
 
-# Location of backup file
-backup_file: ./templates/test_backup.txt
+#Stores the log output when a backup is ran
+loc_output: N/A
 
-# Points to the defualt email list for all playbooks 
+#Points to the default email list for all playbooks 
 default_list: ../mail_lists/default_list.txt
+
+#Main email list for the mail task
+main_list: 

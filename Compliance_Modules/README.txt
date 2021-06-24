@@ -16,6 +16,8 @@ Variables that are used in this playbook:
 
 - issue_count: This counts the amount of issues discovered in total so that it can be complied in an email
 
+- ssh_port: This variable is for non-standard SSH ports
+
 ===system_update variables===
 
 - system_status_result: This stores whether there is an issue with the computer or not. Defaults to an issue in case something in the playbook breaks

@@ -2,7 +2,7 @@
 #####################################################################################
 # This playbook's function is to bind a new Linux based computer to Active Directory
 #
-#Last updated by: Ben Firestine 10/16/2020
+#Last updated by: Ben Firestine 06/23/2021
 #####################################################################################
 
 # Filter out offline hosts
@@ -10,12 +10,15 @@
   hosts: all
   gather_facts: false
 
+  vars_files:
+    - ./vars/default.yml
+
 # Checking for online hosts
   tasks:
     - block:
         - name: determine hosts that are up
-          wait_for_connection:
-            timeout: 5
+          wait_for:
+            port: "{{ ssh_port }}"
           vars:
             ansible_connection: ssh
         - name: add devices with connectivity to the "reachable" group
@@ -34,7 +37,7 @@
 # Import variable/secret files
   vars_files:
     # This contains secrets for credentials like emails
-    - ../secrets/vault
+    #- ../secrets/vault
     - ./vars/default.yml
  
   tasks:
@@ -48,5 +51,6 @@
   # Restricts SSH and SUDO access
   - include: ./tasks/ssh_sudo_access.yml
 
-  #UNCOMMENT TO ENABLE EMAIL FUNCTION
+  # Sends email when task is complete
+  #UNCOMMENT TO ENABLE EMAIL FUNCTIONALITY
   #- include: ./tasks/mail.yml

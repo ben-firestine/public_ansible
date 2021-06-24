@@ -1,16 +1,15 @@
 ---
-################################################################################################################
-#This playbook goes through all the current compliance checks and alerts the system administrator if there is an issue
+#####################################################################################
+# This playbook goes through all the current compliance checks and alerts the system Administrator if there is any issues
 #
-#Last updated by: Ben Firestine 10/19/2020
-################################################################################################################
+#Last updated by: Ben Firestine 06/23/2021
+#####################################################################################
 
 # Filter out offline hosts
 - name: identify reachable hosts
   hosts: all
   gather_facts: false
 
-  # Required for computer_checked variable
   vars_files:
     - ./vars/default.yml
 
@@ -18,8 +17,8 @@
   tasks:
     - block:
         - name: determine hosts that are up
-          wait_for_connection:
-            timeout: 5
+          wait_for:
+            port: "{{ ssh_port }}"
           vars:
             ansible_connection: ssh
         - name: add devices with connectivity to the "reachable" group
@@ -32,7 +31,7 @@
       rescue:
         - debug: msg="cannot connect to {{inventory_hostname}}"
 
-# Compliance modules
+# Compliance Modules
 - name: Online hosts
   hosts: reachable
   become: true
@@ -41,7 +40,7 @@
 
 # Import variable/secret files 
   vars_files:   
-    - ../secrets/vault
+   # - ../secrets/vault
     - ./vars/default.yml
 
   tasks:
@@ -49,7 +48,7 @@
   # Runs complaince modules and reporting
   - include: ./tasks/initial_setup.yml
 
-  # Email resulting report - UNCOMMENT TO ENABLE
+  # Email resulting report. UNCOMMENT OUT TO ENABLE MAIL FUNCTION
   #- include: ./tasks/mail.yml
 
   # Cleanup

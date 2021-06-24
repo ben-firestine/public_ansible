@@ -41,9 +41,9 @@
     time: '{{ hour }}:{{ minute }}:{{ second }}'
   when: check_reboot.stat.exists
 
-# Email IF there was an update - UNCOMMENT TO ENABLE
-#- include: ./tasks/mail.yml
-#  when: update.changed
+# Email IF there was an update
+- include: ./tasks/mail.yml
+  when: update.changed
 
 # Ends playbook if the file DOES NOT exist
 - meta: end_host
