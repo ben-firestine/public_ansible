@@ -1,9 +1,0 @@
----
-###########################
-# global variables
-###########################
-
-# Default email list	
-default_list: ../mail_lists/default_list.txt
-
-reachable:

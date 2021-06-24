@@ -1,4 +1,0 @@
-Hostname: {{ ansible_hostname }}
-OS: {{ ansible_distribution }} {{ ansible_distribution_version }}
-
-SSH access has been restricted on this server
